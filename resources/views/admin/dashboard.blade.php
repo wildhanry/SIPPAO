@@ -10,7 +10,12 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
-                    <p><a href="datas" class="btn btn-primary">Data</a></p>
+                    <p class="mt-4">
+                        <a href="datas"
+                            class="text-black h-12 border-black border-2 p-2.5 bg-blue-400 hover:bg-blue-500 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-blue-700 rounded-md no-underline">
+                            Data
+                        </a>
+                    </p>
                 </div>
             </div>
         </div>

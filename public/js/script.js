@@ -1,5 +1,6 @@
+// Event utama setelah DOM dimuat
 document.addEventListener("DOMContentLoaded", () => {
-    // Smooth scrolling with adjustable offset
+    // === Smooth Scrolling dengan Offset ===
     const smoothScrollLinks = document.querySelectorAll('a[href^="#"]');
     const scrollOffset = 80; // Sesuaikan offset ini (dalam piksel)
 
@@ -20,90 +21,129 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Update the year dynamically in the footer
+    // === Update Tahun Secara Dinamis di Footer ===
     const yearElement = document.getElementById("year");
     if (yearElement) {
-        const currentYear = new Date().getFullYear();
-        yearElement.textContent = currentYear;
+        yearElement.textContent = new Date().getFullYear();
     }
-});
 
-function goBack() {
-    window.history.back();
-}
+    // === Toggle Menu untuk Mobile ===
+    const menuToggle = document.getElementById("menu-toggle");
+    if (menuToggle) {
+        menuToggle.addEventListener("click", () => {
+            const menu = document.getElementById("mobile-menu");
+            if (menu) {
+                menu.classList.toggle("hidden");
+            }
+        });
+    }
 
-document.addEventListener("DOMContentLoaded", function () {
+    // === Chat Bubble dan Logika Chat ===
     const chatBubble = document.getElementById("chat-bubble");
     const chatWindow = document.getElementById("chat-window");
     const sendButton = document.getElementById("send-btn");
     const chatInput = document.getElementById("chat-input");
     const chatContent = document.getElementById("chat-content");
 
-    // Toggle chat window ketika bubble diklik
-    chatBubble.addEventListener("click", () => {
-        chatWindow.classList.toggle("hidden");
-    });
+    if (chatBubble && chatWindow && sendButton && chatInput && chatContent) {
+        // Toggle chat window saat bubble diklik
+        chatBubble.addEventListener("click", () => {
+            chatWindow.classList.toggle("hidden");
+        });
 
-    // Kirim pesan ke API
-    sendButton.addEventListener("click", async () => {
-        const userMessage = chatInput.value.trim();
-        if (!userMessage) return;
+        // Kirim pesan ke API
+        sendButton.addEventListener("click", async () => {
+            const userMessage = chatInput.value.trim();
+            if (!userMessage) return;
 
-        // Tampilkan pesan pengguna
-        const userMessageElem = document.createElement("p");
-        userMessageElem.className = "text-right text-sm text-gray-800 mb-2";
-        userMessageElem.textContent = userMessage;
-        chatContent.appendChild(userMessageElem);
-        chatInput.value = "";
+            // Tampilkan pesan pengguna
+            appendMessage(chatContent, userMessage, "user");
 
-        // Tampilkan loading
-        const loadingElem = document.createElement("p");
-        loadingElem.className = "text-sm text-gray-500 italic";
-        loadingElem.textContent = "Loading...";
-        chatContent.appendChild(loadingElem);
+            // Bersihkan input
+            chatInput.value = "";
 
-        try {
-            const response = await fetch(
-                "https://api.rifandavinci.my.id/aichat/gpt4?text=" +
-                    encodeURIComponent(userMessage)
+            // Tampilkan loading
+            const loadingElem = appendMessage(
+                chatContent,
+                "Loading...",
+                "loading"
             );
-            console.log("Response status:", response.status);
-            const data = await response.json();
-            console.log("Response data:", data);
 
-            // Hapus loading jika masih ada
-            if (loadingElem.parentNode) {
-                chatContent.removeChild(loadingElem);
+            try {
+                const response = await fetch(
+                    `https://api.rifandavinci.my.id/aichat/gpt4?text=${encodeURIComponent(
+                        userMessage
+                    )}`
+                );
+                const data = await response.json();
+
+                // Hapus loading
+                removeElement(loadingElem);
+
+                // Tampilkan respons dari bot
+                if (data.result) {
+                    appendMessage(chatContent, data.result, "bot");
+                } else {
+                    appendMessage(
+                        chatContent,
+                        "Error: Respons tidak valid.",
+                        "error"
+                    );
+                }
+            } catch (error) {
+                console.error("Error:", error);
+
+                // Hapus loading dan tampilkan pesan error
+                removeElement(loadingElem);
+                appendMessage(
+                    chatContent,
+                    "Terjadi kesalahan. Coba lagi nanti.",
+                    "error"
+                );
             }
 
-            // Cek apakah respons valid (HARUS pakai `data.result`)
-            if (data.result) {
-                const botMessageElem = document.createElement("p");
-                botMessageElem.className =
-                    "text-left text-sm text-gray-800 mb-2";
-                botMessageElem.textContent = data.result;
-                chatContent.appendChild(botMessageElem);
-            } else {
-                const errorElem = document.createElement("p");
-                errorElem.className = "text-sm text-red-500";
-                errorElem.textContent = "Error: Respons tidak valid.";
-                chatContent.appendChild(errorElem);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-
-            // Hapus loading jika error
-            if (loadingElem.parentNode) {
-                chatContent.removeChild(loadingElem);
-            }
-
-            const errorElem = document.createElement("p");
-            errorElem.className = "text-sm text-red-500";
-            errorElem.textContent = "Terjadi kesalahan. Coba lagi nanti.";
-            chatContent.appendChild(errorElem);
-        }
-
-        // Auto-scroll ke bawah
-        chatContent.scrollTop = chatContent.scrollHeight;
-    });
+            // Auto-scroll ke bawah
+            chatContent.scrollTop = chatContent.scrollHeight;
+        });
+    }
 });
+
+// === Fungsi Tambahan ===
+
+// Menambah pesan ke chat content
+function appendMessage(container, message, type) {
+    const messageElem = document.createElement("p");
+    messageElem.textContent = message;
+
+    switch (type) {
+        case "user":
+            messageElem.className = "text-right text-sm text-gray-800 mb-2";
+            break;
+        case "bot":
+            messageElem.className = "text-left text-sm text-gray-800 mb-2";
+            break;
+        case "error":
+            messageElem.className = "text-sm text-red-500";
+            break;
+        case "loading":
+            messageElem.className = "text-sm text-gray-500 italic";
+            break;
+        default:
+            messageElem.className = "text-sm";
+    }
+
+    container.appendChild(messageElem);
+    return messageElem;
+}
+
+// Menghapus elemen tertentu
+function removeElement(element) {
+    if (element && element.parentNode) {
+        element.parentNode.removeChild(element);
+    }
+}
+
+// Fungsi untuk kembali ke halaman sebelumnya
+function goBack() {
+    window.history.back();
+}

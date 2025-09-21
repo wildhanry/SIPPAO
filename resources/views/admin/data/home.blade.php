@@ -12,9 +12,11 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <h1 class="mb-0">Data Anggaran</h1>
                         @if (Auth::user()->usertype == 'admin')
-                            <a href="{{ route('admin/datas/create') }}" class="btn btn-primary">Tambah Data</a>
+                            <a href="{{ route('admin/datas/create') }}"
+                                class="text-black h-12 border-black border-2 p-2.5 bg-blue-400 hover:bg-blue-500 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-blue-700 rounded-md no-underline">
+                                Tambah Data
+                            </a>
                         @endif
-
                     </div>
                     <hr />
                     @if (Session::has('success'))
@@ -38,22 +40,22 @@
                                     <td class="align-middle">{{ $loop->iteration }}</td>
                                     <td class="align-middle">{{ $data->kategori }}</td>
                                     <td class="align-middle">{{ $data->uraian }}</td>
-                                    <td class="align-middle">{{ $data->formatted_nominal }}
-                                    </td>
-                                    <td class="align-middle">
+                                    <td class="align-middle">{{ $data->formatted_nominal }}</td>
                                     <td class="align-middle">
                                         @if (Auth::user()->usertype == 'admin')
-                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                            <div class="flex gap-2">
                                                 <a href="{{ route('admin/datas/edit', ['id' => $data->id]) }}"
-                                                    class="btn btn-secondary">Edit</a>
+                                                    class="flex items-center justify-center text-black h-10 w-20 border-black border-2 bg-blue-400 hover:bg-blue-500 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-blue-700 rounded-md no-underline">
+                                                    Edit
+                                                </a>
                                                 <a href="{{ route('admin/datas/delete', ['id' => $data->id]) }}"
-                                                    class="btn btn-danger">Delete</a>
+                                                    class="flex items-center justify-center text-black h-10 w-20 border-black border-2 bg-red-400 hover:bg-red-500 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-red-700 rounded-md no-underline">
+                                                    Delete
+                                                </a>
                                             </div>
                                         @else
                                             <span class="text-muted">View Only</span>
                                         @endif
-                                    </td>
-
                                     </td>
                                 </tr>
                             @empty

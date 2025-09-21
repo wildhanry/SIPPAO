@@ -35,7 +35,8 @@
                         </div>
 
                         <div class="mt-4">
-                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
+                            <button type="submit"
+                                class="inline-flex items-center justify-center text-black h-10 w-20 border-black border-2 bg-blue-400 hover:bg-blue-500 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-blue-700 rounded-md no-underline">Save</button>
                         </div>
                     </form>
 

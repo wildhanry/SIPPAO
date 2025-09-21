@@ -39,13 +39,13 @@
                                     <td class="border border-gray-300 px-4 py-2">{{ $user->usertype }}</td>
                                     <td class="border border-gray-300 px-4 py-2">
                                         <a href="{{ route('admin.users.edit', $user->id) }}"
-                                           class="text-blue-500 hover:text-blue-700 underline">Edit</a>
+                                            class="inline-flex items-center justify-center text-black h-10 w-20 border-black border-2 bg-blue-400 hover:bg-blue-500 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-blue-700 rounded-md no-underline">Edit</a>
                                         <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
-                                              class="inline-block">
+                                            class="inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                    class="text-red-500 hover:text-red-700 underline ml-2">
+                                                class="inline-flex items-center justify-center text-black h-10 w-20 border-black border-2 bg-red-400 hover:bg-red-500 hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-red-700 rounded-md no-underline">
                                                 Delete
                                             </button>
                                         </form>

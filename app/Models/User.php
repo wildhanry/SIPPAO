@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'usertype', // pastikan usertype juga ditambahkan
+        'usertype', 
     ];
 
 
